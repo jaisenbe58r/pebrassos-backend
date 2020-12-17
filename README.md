@@ -10,14 +10,14 @@
 
 [![made-for-VSCode](https://img.shields.io/badge/Made%20for-Jaime%20Sendra-1f425f.svg)](https://jaimesendraberenguer.com.com/)
 ![Python](https://img.shields.io/badge/python-3.7%20%7C%203.8-blue)
-[![GitHub release](https://img.shields.io/github/release/jaisenbe58r/iaapi.svg)](https://GitHub.com/jaisenbe58r/iaapi/releases/)
-[![Build status](https://ci.appveyor.com/api/projects/status/7vx20e0h5dxcyla2/branch/master?svg=true)](https://ci.appveyor.com/project/jaisenbe58r/iaapi/branch/master)
-[![Codacy Badge](https://app.codacy.com/project/badge/Grade/cab5f019654542af8179abde2a7ab19f)](https://www.codacy.com/gh/jaisenbe58r/iaapi/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=jaisenbe58r/iaapi&amp;utm_campaign=Badge_Grade)
-[![codecov](https://codecov.io/gh/jaisenbe58r/iaapi/branch/master/graph/badge.svg)](https://codecov.io/gh/jaisenbe58r/iaapi)
-[![License](https://img.shields.io/badge/license-MIT-ORANGE.svg)](https://github.com/jaisenbe58r/iaapi/blob/master/LICENSE)
-[![GitHub contributors](https://img.shields.io/github/contributors/jaisenbe58r/iaapi.svg)](https://GitHub.com/jaisenbe58r/iaapi/graphs/contributors/)
-[![GitHub issues](https://img.shields.io/github/issues/jaisenbe58r/iaapi.svg)](https://GitHub.com/jaisenbe58r/iaapi/issues/)
-[![GitHubIssues](https://img.shields.io/badge/issue_tracking-github-violet.svg)](https://github.com/jaisenbe58r/iaapi/issues)
+[![GitHub release](https://img.shields.io/github/release/jaisenbe58r/pebrassos-backend.svg)](https://GitHub.com/jaisenbe58r/pebrassos-backend/releases/)
+[![Build status](https://ci.appveyor.com/api/projects/status/7vx20e0h5dxcyla2/branch/master?svg=true)](https://ci.appveyor.com/project/jaisenbe58r/pebrassos-backend/branch/master)
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/cab5f019654542af8179abde2a7ab19f)](https://www.codacy.com/gh/jaisenbe58r/pebrassos-backend/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=jaisenbe58r/pebrassos-backend&amp;utm_campaign=Badge_Grade)
+[![codecov](https://codecov.io/gh/jaisenbe58r/pebrassos-backend/branch/master/graph/badge.svg)](https://codecov.io/gh/jaisenbe58r/pebrassos-backend)
+[![License](https://img.shields.io/badge/license-MIT-ORANGE.svg)](https://github.com/jaisenbe58r/pebrassos-backend/blob/master/LICENSE)
+[![GitHub contributors](https://img.shields.io/github/contributors/jaisenbe58r/pebrassos-backend.svg)](https://GitHub.com/jaisenbe58r/pebrassos-backend/graphs/contributors/)
+[![GitHub issues](https://img.shields.io/github/issues/jaisenbe58r/pebrassos-backend.svg)](https://GitHub.com/jaisenbe58r/pebrassos-backend/issues/)
+[![GitHubIssues](https://img.shields.io/badge/issue_tracking-github-violet.svg)](https://github.com/jaisenbe58r/pebrassos-backend/issues)
 
 # iAApi
 Proyecto base para la creación de una API basada en FastAPI. El proyecto es una adaptación del template proporcionado por ```nsidnev``` en su repositorio de Github: [GitHub | nsidnev](https://github.com/nsidnev/fastapi-realworld-example-app)
@@ -75,7 +75,7 @@ sudo systemctl stop docker
 En primer lugar, clonamos el repositorio e instalamos todas las dependencias para crear y arrancar el entorno de trabajo, para ello utilizaremos ``poetry``:
 
 ```sh
-git clone https://github.com/jaisenbe58r/iaapi
+git clone https://github.com/jaisenbe58r/pebrassos-backend
 cd iaapi/
 poetry install
 poetry shell
@@ -147,9 +147,9 @@ CMD alembic upgrade head && \
 Para crear este servicio Fast API a partir del ``Dockerfile`` y subirlo a nuestra cuenta particular de ```Docker Hub``` procedemos de la siguiente manera:
 
 ```sh
-docker build -t jaisenbe58r/iaapi:latest .
+docker build -t jaisenbe58r/pebrassos-backend:latest .
 echo $DOCKER_PASSWORD | docker login -u $DOCKER_USER --password-stdin
-docker push jaisenbe58r/iaapi:latest
+docker push jaisenbe58r/pebrassos-backend:latest
 ```
 A continuación os dejo un [enlace](https://avbravo-2.gitbook.io/docker/chapter1/registrarse-en-docker-hub) de cómo crear vuestra propia cuenta en ```Docker Hub```.
 
@@ -157,7 +157,7 @@ A continuación os dejo un [enlace](https://avbravo-2.gitbook.io/docker/chapter1
 
 Docker Swarm es una herramienta integrada en el ecosistema de Docker que permite la gestión de un cluster de servidores. Pone a nuestra disposición una API con la que podemos administrar las  tareas y asignación de recursos de cada contenedor dentro de cada una de las máquinas. Dicha API nos permite gestionar el cluster como si se tratase de una sola máquina Docker.
 
-Para nuestro proyecto, se genera un clúster con docker swarm con 1 replica del microservicio de FastAPI ```jaisenbe58r/iaapi:latest``` creado en el apartado anterior, 1 base de datos postgress ``postgres:11.5-alpine``, 1 administrador de base de datos pgadmin ``dpage/pgadmin4``, 1 visualizador de contenedores docker en el clúster (```visualizer```), 1 microservicio de monitoreo de servicios (```prometheus```) y 1 microservicio de consulta y visualización (```grafana```):
+Para nuestro proyecto, se genera un clúster con docker swarm con 1 replica del microservicio de FastAPI ```jaisenbe58r/pebrassos-backend:latest``` creado en el apartado anterior, 1 base de datos postgress ``postgres:11.5-alpine``, 1 administrador de base de datos pgadmin ``dpage/pgadmin4``, 1 visualizador de contenedores docker en el clúster (```visualizer```), 1 microservicio de monitoreo de servicios (```prometheus```) y 1 microservicio de consulta y visualización (```grafana```):
 
 
 ```yml
@@ -165,7 +165,7 @@ version: '3'
 
 services:
   app:
-    image: jaisenbe58r/iaapi:latest
+    image: jaisenbe58r/pebrassos-backend:latest
     ports:
       - 8000:8000
     env_file:
@@ -368,9 +368,9 @@ Para la implementación de este ``workflow CI/CD`` utilizamos [GitHub Actions](h
 
 Tendremos 4 tipos de ``workflows``:
 
-- **Styles:** Se desplegan los test de análisis de código estático con la herramienta ``Flake8``, con la que verificamos ``pep8, pyflakes and circular complexity``. Puede acceder a la documentación a partir del siguiente [enlace](https://buildmedia.readthedocs.org/media/pdf/flake8/latest/flake8.pdf). Puede utilizar a la herramienta [codacy](https://app.codacy.com/gh/jaisenbe58r/iaapi/dashboard?utm_source=github.com&utm_medium=referral&utm_content=jaisenbe58r/iaapi&utm_campaign=Badge_Grade) para chequear la calidad de código para el proyecto.
+- **Styles:** Se desplegan los test de análisis de código estático con la herramienta ``Flake8``, con la que verificamos ``pep8, pyflakes and circular complexity``. Puede acceder a la documentación a partir del siguiente [enlace](https://buildmedia.readthedocs.org/media/pdf/flake8/latest/flake8.pdf). Puede utilizar a la herramienta [codacy](https://app.codacy.com/gh/jaisenbe58r/pebrassos-backend/dashboard?utm_source=github.com&utm_medium=referral&utm_content=jaisenbe58r/pebrassos-backend&utm_campaign=Badge_Grade) para chequear la calidad de código para el proyecto.
 
-- **Tests**: Corresponde a la automatización de todos los tests del proyecto, tal y como se ha comentado en el apartado anterior. Puede acceder a la herramienta [codecov](https://codecov.io/gh/jaisenbe58r/iaapi), para monitorizar la covertura de test a su código.
+- **Tests**: Corresponde a la automatización de todos los tests del proyecto, tal y como se ha comentado en el apartado anterior. Puede acceder a la herramienta [codecov](https://codecov.io/gh/jaisenbe58r/pebrassos-backend), para monitorizar la covertura de test a su código.
 
 - **API spec:** Test de Integración del servicio de FastAPI. Se desplegan los test de integración implementados en el directorio ``./postman/``.
 
