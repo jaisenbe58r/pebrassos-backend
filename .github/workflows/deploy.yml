@@ -1,0 +1,52 @@
+name: Deploy
+
+on:
+  push:
+    branches:
+      - master
+env:
+  IMAGE_NAME: jaisenbe58r/pebrassos
+  DOCKER_USER: ${{ secrets.DOCKER_USER }}
+  DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+jobs:
+  build:
+    name: Build Container
+    runs-on: ubuntu-18.04
+    steps:
+      - uses: actions/checkout@v1
+      - name: Build image and publish to registry
+        run: |
+          docker build -t $IMAGE_NAME:latest .
+          echo $DOCKER_PASSWORD | docker login -u $DOCKER_USER --password-stdin
+          docker push $IMAGE_NAME:latest
+
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-18.04
+    needs: build
+    steps:
+      - uses: actions/checkout@master
+      - name: Deploy service with traefik over ssh
+        env:
+          SSH_USER: ${{ secrets.SSH_USER }}
+          SSH_HOST: ${{ secrets.SSH_HOST }}
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          DB_CONNECTION: ${{ secrets.DB_CONNECTION }}
+          SECRET_KEY: ${{ secrets.SECRET_KEY }}
+        run: |
+          which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )
+          eval $(ssh-agent -s)
+          echo "add ssh key"
+          echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add - > /dev/null
+          mkdir -p ~/.ssh
+          chmod 700 ~/.ssh
+          ssh -o "UserKnownHostsFile=/dev/null" -o "StrictHostKeyChecking=no" $SSH_USER@$SSH_HOST "
+            cd /var/www/pebrassos-backend && \
+            git pull && \
+            (docker stack rm pebrassos-services || true) && \
+            (docker swarm leave --force || true) && \
+            docker swarm init --advertise-addr 10.19.0.6 && \
+            docker stack deploy -c docker-compose.yml pebrassos-services && \
+            docker stack ls && \
+            docker service ls && \
+            docker container ls"
